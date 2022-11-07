@@ -1,11 +1,12 @@
 const quotes = [
-  "Some people feel the rain. Others just get wet.",
-  "Love the life you live. Live the life you love.",
-  "Emancipate yourselves from mental slavery. None but ourselves can free our minds.",
-  "Live for yourself and you will live in vain; Live for others, and you will live again.",
-  "I no have education. I have inspiration. If I was educated I would be a damn fool.",
-  "Better to die fighting for freedom than be a prisoner all the days of your life.",
-  "Open your eyes, look within. Are you satisfied with the life you’re living?",
+  // "Some people feel the rain. Others just get wet.",
+  // "Love the life you live. Live the life you love.",
+  // "Emancipate yourselves from mental slavery. None but ourselves can free our minds.",
+  // "Live for yourself and you will live in vain; Live for others, and you will live again.",
+  // "I no have education. I have inspiration. If I was educated I would be a damn fool.",
+  // "Better to die fighting for freedom than be a prisoner all the days of your life.",
+  // "Open your eyes, look within. Are you satisfied with the life you’re living?",
+  "Test",
 ];
 
 const quote = document.querySelector(".quote");
@@ -13,6 +14,7 @@ const input = document.querySelector(".input");
 const results = document.querySelector(".results");
 let quoteWordsArray = [];
 let indexOfActiveWord = 0;
+let timer;
 
 const randomQuote = () => {
   const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -33,7 +35,8 @@ const displayQuote = (indexOfActiveWord) => {
 const checkInput = () => {
   const inputValue = input.value;
 
-  if (indexOfActiveWord === 0 && inputValue.length > 0) {
+  if (indexOfActiveWord === 0 && inputValue.length === 1) {
+    timer = new Date().getTime();
   }
 
   if (inputValue === quoteWordsArray[indexOfActiveWord].slice(0, inputValue.length)) {
@@ -46,6 +49,14 @@ const checkInput = () => {
     indexOfActiveWord += 1;
     displayQuote(indexOfActiveWord);
     input.value = "";
+  }
+
+  if (indexOfActiveWord === quoteWordsArray.length) {
+    const time = new Date().getTime() - timer;
+    const seconds = time / 1000;
+    results.textContent = `You finished in ${seconds} seconds`;
+    input.value = "";
+    input.disabled = true;
   }
 };
 
