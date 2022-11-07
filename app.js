@@ -1,17 +1,21 @@
 const quotes = [
-  // "Some people feel the rain. Others just get wet.",
-  // "Love the life you live. Live the life you love.",
-  // "Emancipate yourselves from mental slavery. None but ourselves can free our minds.",
-  // "Live for yourself and you will live in vain; Live for others, and you will live again.",
-  // "I no have education. I have inspiration. If I was educated I would be a damn fool.",
-  // "Better to die fighting for freedom than be a prisoner all the days of your life.",
-  // "Open your eyes, look within. Are you satisfied with the life you’re living?",
+  "Some people feel the rain. Others just get wet.",
+  "Love the life you live. Live the life you love.",
+  "Emancipate yourselves from mental slavery. None but ourselves can free our minds.",
+  "Live for yourself and you will live in vain; Live for others, and you will live again.",
+  "I no have education. I have inspiration. If I was educated I would be a damn fool.",
+  "Better to die fighting for freedom than be a prisoner all the days of your life.",
+  "Open your eyes, look within. Are you satisfied with the life you’re living?",
   "Test",
 ];
 
 const quote = document.querySelector(".quote");
 const input = document.querySelector(".input");
 const results = document.querySelector(".results");
+
+const restart = document.querySelector(".restart");
+const newQuote = document.querySelector(".new-quote");
+
 let quoteWordsArray = [];
 let indexOfActiveWord = 0;
 let timer;
@@ -37,6 +41,7 @@ const checkInput = () => {
 
   if (indexOfActiveWord === 0 && inputValue.length === 1) {
     timer = new Date().getTime();
+    restart.disabled = false;
   }
 
   if (inputValue === quoteWordsArray[indexOfActiveWord].slice(0, inputValue.length)) {
@@ -54,13 +59,28 @@ const checkInput = () => {
   if (indexOfActiveWord === quoteWordsArray.length) {
     const time = new Date().getTime() - timer;
     const seconds = time / 1000;
-    results.textContent = `You finished in ${seconds} seconds`;
+    results.insertAdjacentHTML("beforeend", `You finished in ${seconds} seconds. <br>`);
     input.value = "";
     input.disabled = true;
   }
 };
 
+input.addEventListener("input", checkInput);
+
+restart.addEventListener("click", () => {
+  indexOfActiveWord = 0;
+  displayQuote(indexOfActiveWord);
+  restart.disabled = true;
+  input.disabled = false;
+});
+
+newQuote.addEventListener("click", () => {
+  randomQuote();
+  indexOfActiveWord = 0;
+  displayQuote(indexOfActiveWord);
+  input.disabled = false;
+  results.textContent = "";
+});
+
 randomQuote();
 displayQuote(indexOfActiveWord);
-
-input.addEventListener("input", checkInput);
