@@ -12,26 +12,44 @@ const quote = document.querySelector(".quote");
 const input = document.querySelector(".input");
 const results = document.querySelector(".results");
 let quoteWordsArray = [];
+let indexOfActiveWord = 0;
 
 const randomQuote = () => {
   const randomIndex = Math.floor(Math.random() * quotes.length);
-  quote.textContent = '"' + quotes[randomIndex] + '"';
   quoteWordsArray = quotes[randomIndex].split(" ").map((word) => word + " ");
   quoteWordsArray[quoteWordsArray.length - 1] = quoteWordsArray[quoteWordsArray.length - 1].trim();
 };
 
+const displayQuote = (indexOfActiveWord) => {
+  const wordActiveBefore = document.querySelector(".word-active-before");
+  const wordActive = document.querySelector(".word-active");
+  const wordActiveAfter = document.querySelector(".word-active-after");
+
+  wordActiveBefore.textContent = quoteWordsArray.slice(0, indexOfActiveWord).join(" ");
+  wordActive.textContent = quoteWordsArray[indexOfActiveWord];
+  wordActiveAfter.textContent = quoteWordsArray.slice(indexOfActiveWord + 1).join(" ");
+};
+
 const checkInput = () => {
   const inputValue = input.value;
-  let wordArray = inputValue.split("");
 
-  if (inputValue === wordArray[0]) {
-    wordArray.shift();
-    input.style.backgroundColor = "white";
+  if (indexOfActiveWord === 0 && inputValue.length > 0) {
+  }
+
+  if (inputValue === quoteWordsArray[indexOfActiveWord].slice(0, inputValue.length)) {
+    input.classList.remove("incorrect");
   } else {
-    input.style.backgroundColor = "red";
+    input.classList.add("incorrect");
+  }
+
+  if (inputValue === quoteWordsArray[indexOfActiveWord]) {
+    indexOfActiveWord += 1;
+    displayQuote(indexOfActiveWord);
+    input.value = "";
   }
 };
 
 randomQuote();
+displayQuote(indexOfActiveWord);
 
 input.addEventListener("input", checkInput);
